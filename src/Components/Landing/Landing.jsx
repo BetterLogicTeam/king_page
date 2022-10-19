@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { loadWeb3 } from "../apis/api";
+import notcoonect from '../../Assets/notconnect.png'
+import connected from '../../Assets/connected.png'
 import { bnbContractAddress, bnbNftContractAbi } from "../utilies/constant";
 import "./Landing.css";
 
 function Landing() {
   let [value, setValue] = useState(1);
-  const [ValueBNB, setValueBNB] = useState("")
+  const [ValueBNB, setValueBNB] = useState("");
+  const [connect, setconnect] = useState(false)
+
 
   const increaseValue = () => {
     // if (value < 10) {
@@ -28,11 +32,14 @@ function Landing() {
     let acc = await loadWeb3();
 
     if (acc == "No Wallet") {
-      toast.error("No Wallet Connected")
+      setconnect(false)
+      // toast.error("No Wallet Connected")
     }
     else if (acc == "Wrong Network") {
-      toast.error("Wrong Newtwork please connect to test net")
+      setconnect(false)
+      // toast.error("Wrong Newtwork please connect to test net")
     } else {
+      setconnect(true)
 
 
       try {
@@ -102,8 +109,26 @@ function Landing() {
   //   }
   // }
 
+  const connectdata=async()=>{
+    let acc = await loadWeb3();
+
+    if (acc == "No Wallet") {
+      setconnect(false)
+      // toast.error("No Wallet Connected")
+    }
+    else if (acc == "Wrong Network") {
+      setconnect(false)
+      // toast.error("Wrong Newtwork please connect to test net")
+    } else {
+      setconnect(true)
+    }
+  }
+
   useEffect(() => {
     getValue()
+    setInterval(() => {
+      connectdata()
+    }, 1000);
 
   }, [])
   
@@ -113,6 +138,12 @@ function Landing() {
   return (
     <>
       <div className="main_div">
+      <div className="connected_div">
+
+{
+  connect ? <> <img src={connected} alt="" width="25%" /> </> : <><img src={notcoonect} alt="" width="25%" /></>
+}
+</div>
         <div className="container kig">
           <div className=" d-flex responsive">
             <div className="row  justify-content-center">

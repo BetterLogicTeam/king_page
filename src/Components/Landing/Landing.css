@@ -19,6 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 30px;
 }
 
 .scnd{
@@ -217,6 +218,9 @@
     #vid{
         border-radius: 10px;
     }
+    .connected_div img{
+        width: 190px;
+    }
 }
 
 
@@ -272,6 +276,14 @@
         width: 56%;
         padding-bottom: 5px;
     }
+
+    .kig{
+        margin-top: 80px;
+    }
+
+    .connected_div{
+        margin-top: -18px !important;
+    }
 }
 
 @media (min-width:1024px) and (max-width:1200px){
@@ -309,6 +321,14 @@
         width: 56%;
         padding-bottom: 5px;
     }
+
+    .kig{
+        margin-top: 60px;
+    }
+
+    .connected_div{
+        margin-top: -13px;
+    }
 }
 
 @media (min-width:1300px) and (max-width:1800px) {
@@ -329,5 +349,15 @@
     .main_div{
         padding-top: 110px;
     }
+
+    .connected_div img{
+        width: 450px;
+    }
     
+}
+
+.connected_div{
+    display: flex;
+    justify-content: end;
+    margin-top: -8rem !important;
 }

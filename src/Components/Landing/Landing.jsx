@@ -82,13 +82,25 @@ function Landing() {
 
   const getValue=async()=>{
     try{
+      let acc = await loadWeb3();
+
+    if (acc == "No Wallet") {
+      setconnect(false)
+      toast.error("No Wallet Connected")
+    }
+    else if (acc == "Wrong Network") {
+      setconnect(false)
+      toast.error("Wrong Newtwork please connect to test net")
+    } else {
+      setconnect(true)
+    
       const web3 = window.web3;
         let nftContractOf = new web3.eth.Contract(bnbNftContractAbi, bnbContractAddress);
        let mintingWirePrice = await nftContractOf.methods.minting_price().call()
        mintingWirePrice = web3.utils.fromWei(mintingWirePrice);
        setValueBNB(mintingWirePrice)
        console.log("mintingWirePrice",mintingWirePrice);
-
+    }
     }catch(e){
       console.log("Error While get BNB value",e);
     }

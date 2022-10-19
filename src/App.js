@@ -3,6 +3,8 @@ import './App.css';
 import Landing from './Components/Landing/Landing'
 import { useEffect } from 'react';
 // import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
@@ -30,7 +32,7 @@ function App() {
   
   return (
     <div className="App">
-       {/* <ToastContainer /> */}
+       <ToastContainer />
       <Landing />
     </div>
   );

@@ -151,6 +151,7 @@
     height: 40px;
     margin: 0px 15px;
     box-shadow: inset;
+    padding-top: 6px;
     border-radius: 4px;
     text-align: center !important;
     box-shadow: 3px 4px 6px rgb(24, 22, 22);
@@ -175,7 +176,7 @@
 }
 
 .light img{
-    width: 125px;
+    width: 135px;
 }
 
 @media screen and (max-width:700px) {
@@ -231,6 +232,8 @@
     .main_div{
         height: auto !important;
     }
+
+    
 }
 
 @media (min-width:768px) and (max-width:1023px){
@@ -252,6 +255,7 @@
     }
 
     .enput{
+        padding-top: 0px;
         height: 31px;
     }
 
@@ -289,6 +293,7 @@
 
     .enput{
         height: 31px;
+        padding-top: 1px;
     }
 
     h5{

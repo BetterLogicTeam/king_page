@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 import { loadWeb3 } from "../apis/api";
 import notcoonect from '../../Assets/notconnect.png'
 import connected from '../../Assets/connected.png'
+import card from '../../Assets/card.jpeg'
+import logo from '../../Assets/logo.png'
+import coin from '../../Assets/coin.jpeg'
+import mint from '../../Assets/mint.png'
 import { bnbContractAddress, bnbNftContractAbi } from "../utilies/constant";
 import "./Landing.css";
 
@@ -161,13 +165,13 @@ function Landing() {
             <div className="row  justify-content-center">
               <div className="col-md-4 responsive">
                 <div className="vid_div">
-                  <img src="card.jpeg" className="img-fluid" alt="" />
+                  <img src={card} className="img-fluid" alt="" />
                 </div>
               </div>
 
               <div className="col-md-4 responsive scnd">
                 <div className="logo">
-                  <img src="logo.png" className="img-fluid w-50" alt="" />
+                  <img src={logo} className="img-fluid w-50" alt="" />
                 </div>
                 <div className="heding">
                   <h5 className="text-white">GENESIS KING CROWN</h5>
@@ -175,7 +179,7 @@ function Landing() {
                 </div>
 
                 <div className="light">
-                  <img src="coin.jpeg"  width="100%" alt="" />
+                  <img src={coin}  width="100%" alt="" />
                 </div>
                 <div className="blck d-flex justify-content-center">
                   <div className="btn plus" onClick={() => decreaseValue()}>
@@ -190,7 +194,7 @@ function Landing() {
                 </div>
 
                 <div className="mint" style={{ cursor: "pointer" }}>
-                  <img src="mint.png" alt="" onClick={()=>Mint_With_BNB()} />
+                  <img src={mint} alt="" onClick={()=>Mint_With_BNB()} />
                 </div>
               </div>
             </div>

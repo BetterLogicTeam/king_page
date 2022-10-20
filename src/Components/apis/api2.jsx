@@ -1,13 +1,12 @@
 import Web3 from "web3";
-const chainId = 5 // Polygon Mainnet
 let isItConnected = false;
 const networks = {
   bsc: {
-    chainId: `0x${Number(5).toString(16)}`,
+    chainId: `0x${Number(56).toString(16)}`,
     chainName: "Binance smart chain",
     nativeCurrency: {
-      name: "Goerli test network",
-      symbol: "eth",
+      name: "BSC",
+      symbol: "BNB",
       decimals: 18,
     },
     rpcUrls: [
@@ -25,33 +24,23 @@ const networks = {
       "https://bsc-dataseed4.ninicoin.io",
       "wss://bsc-ws-node.nariox.org",
     ],
-    blockExplorerUrls: ["https://goerli.etherscan.io"],
+    blockExplorerUrls: ["https://bscscan.com"],
   },
 };
 const changeNetwork = async ({ networkName }) => {
-    if (window.ethereum.networkVersion !== chainId) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: Web3.utils.toHex(chainId) }]
-          });
-        } catch (err) {
-            // This error code indicates that the chain has not been added to MetaMask
-          if (err.code === 4902) {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: [
-                {
-                  chainName: 'Polygon Mainnet',
-                  chainId: Web3.utils.toHex(chainId),
-                  nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC' },
-                  rpcUrls: ['https://polygon-rpc.com/']
-                }
-              ]
-            });
-          }
-        }
-      }
+  try {
+    if (!window.ethereum) throw new Error("No crypto wallet found");
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          ...networks[networkName],
+        },
+      ],
+    });
+  } catch (err) {
+    console.log("not found");
+  }
 };
 const handleNetworkSwitch = async (networkName) => {
   await changeNetwork({ networkName });
@@ -74,7 +63,7 @@ export const disconnectWallet = async () => {
   });
   console.log("disconnect");
 };
-export const loadWeb4 = async () => {
+export const loadWeb3 = async () => {
   try {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
@@ -82,11 +71,11 @@ export const loadWeb4 = async () => {
       await window.web3.eth.getChainId((err, netId) => {
         // console.log("networkId==>", netId);
         switch (netId.toString()) {
-          case "5":
+          case "56":
             isItConnected = true;
             break;
           default:
-            handleNetworkSwitch("eth");
+            handleNetworkSwitch("bsc");
             isItConnected = false;
         }
       });

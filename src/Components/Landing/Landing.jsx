@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { loadWeb3 } from "../apis/api";
-import notcoonect from '../../Assets/notconnect.png'
-import connected from '../../Assets/connected.png'
-import card from '../../Assets/card.jpeg'
-import coin from '../../Assets/coin.jpeg'
-import logo from '../../Assets/logo.png'
-import mint from '../../Assets/mint.png'
+import notcoonect from "../../Assets/notconnect.png";
+import connected from "../../Assets/connected.png";
+import card from "../../Assets/card.jpeg";
+import coin from "../../Assets/coin.jpeg";
+import logo from "../../Assets/logo.png";
+import mint from "../../Assets/mint.png";
 import { bnbContractAddress, bnbNftContractAbi } from "../utilies/constant";
 import "./Landing.css";
+import { Oval } from "react-loader-spinner";
 
 function Landing() {
   let [value, setValue] = useState(1);
   const [ValueBNB, setValueBNB] = useState("");
-  const [connect, setconnect] = useState(false)
+  const [connect, setconnect] = useState(false);
+  const [spinnerload, setspinnerload] = useState(true);
+  const [name, setName] = useState(true);
 
 
   const increaseValue = () => {
@@ -28,87 +31,89 @@ function Landing() {
       setValue(--value);
       console.log("setValue", value);
     }
-  };
-
-
+  };  
+  // contractNam = await nftContractOf.methods.name().call();
 
   const Mint_With_BNB = async () => {
     let acc = await loadWeb3();
 
     if (acc == "No Wallet") {
-      setconnect(false)
+      setconnect(false);
       // toast.error("No Wallet Connected")
-    }
-    else if (acc == "Wrong Network") {
-      setconnect(false)
+    } else if (acc == "Wrong Network") {
+      setconnect(false);
       // toast.error("Wrong Newtwork please connect to test net")
     } else {
-      setconnect(true)
-
+      setconnect(true);
 
       try {
         // setButtonOne("Please Wait While Processing")
-
+        setspinnerload(false);
         const web3 = window.web3;
-        let nftContractOf = new web3.eth.Contract(bnbNftContractAbi, bnbContractAddress);
-        let mintingWirePrice
-        let own_Address = await nftContractOf.methods.owner().call()
-       
+        let nftContractOf = new web3.eth.Contract(
+          bnbNftContractAbi,
+          bnbContractAddress
+        );
+        let mintingWirePrice;
+        let own_Address = await nftContractOf.methods.owner().call();
+
         if (own_Address == acc) {
           mintingWirePrice = 0;
         } else {
-          mintingWirePrice = await nftContractOf.methods.minting_price().call()
+          mintingWirePrice = await nftContractOf.methods.minting_price().call();
           mintingWirePrice = web3.utils.fromWei(mintingWirePrice);
-          setValueBNB(mintingWirePrice)
+          setValueBNB(mintingWirePrice);
           mintingWirePrice = parseFloat(mintingWirePrice);
-          mintingWirePrice = value * mintingWirePrice
+          mintingWirePrice = value * mintingWirePrice;
           mintingWirePrice = web3.utils.toWei(mintingWirePrice.toString());
         }
         // console.log("mintingWirePrice", mintingWirePrice);
 
-        let hash = await nftContractOf.methods.mint( value).send({
+        let hash = await nftContractOf.methods.mint(value).send({
           from: acc,
-          value: mintingWirePrice
-        })
-        toast.success("Transaction Confirmed")
-       
-
-
+          value: mintingWirePrice,
+        });
+        toast.success("Transaction Confirmed");
+        setspinnerload(true);
       } catch (e) {
-        console.log("Error while minting ", e)
-        toast.error("Transaction failed")
-
-
+        console.log("Error while minting ", e);
+        toast.error("Transaction failed");
+        setspinnerload(true);
       }
-
     }
-  }
+  };
 
-  const getValue=async()=>{
-    try{
+  const getValue = async () => {
+    try {
       let acc = await loadWeb3();
 
-    if (acc == "No Wallet") {
-      setconnect(false)
-      toast.error("No Wallet Connected")
+      if (acc == "No Wallet") {
+        setconnect(false);
+        toast.error("No Wallet Connected");
+      } else if (acc == "Wrong Network") {
+        setconnect(false);
+        toast.error("Wrong Newtwork please connect to test net");
+      } else {
+        setconnect(true);
+
+        const web3 = window.web3;
+        let nftContractOf = new web3.eth.Contract(
+          bnbNftContractAbi,
+          bnbContractAddress
+        );
+        let mintingWirePrice = await nftContractOf.methods
+          .minting_price()
+          .call();
+          let contrctName = await nftContractOf.methods.name().call();
+          setName(contrctName)
+        mintingWirePrice = web3.utils.fromWei(mintingWirePrice);
+        setValueBNB(mintingWirePrice);
+        console.log("mintingWirePrice", mintingWirePrice);
+      }
+    } catch (e) {
+      console.log("Error While get BNB value", e);
     }
-    else if (acc == "Wrong Network") {
-      setconnect(false)
-      toast.error("Wrong Newtwork please connect to test net")
-    } else {
-      setconnect(true)
-    
-      const web3 = window.web3;
-        let nftContractOf = new web3.eth.Contract(bnbNftContractAbi, bnbContractAddress);
-       let mintingWirePrice = await nftContractOf.methods.minting_price().call()
-       mintingWirePrice = web3.utils.fromWei(mintingWirePrice);
-       setValueBNB(mintingWirePrice)
-       console.log("mintingWirePrice",mintingWirePrice);
-    }
-    }catch(e){
-      console.log("Error While get BNB value",e);
-    }
-  }
+  };
   // const minting_live_price = async () => {
   //   try {
 
@@ -118,48 +123,47 @@ function Landing() {
   //     Value_in_bnb = web3.utils.fromWei(Value_in_bnb);
   //     setValueBNB(Value_in_bnb)
 
-
-
   //   } catch (e) {
   //     console.log("Erroe while get BNB value", e);
   //   }
   // }
 
-  const connectdata=async()=>{
+  const connectdata = async () => {
     let acc = await loadWeb3();
 
     if (acc == "No Wallet") {
-      setconnect(false)
+      setconnect(false);
       // toast.error("No Wallet Connected")
-    }
-    else if (acc == "Wrong Network") {
-      setconnect(false)
+    } else if (acc == "Wrong Network") {
+      setconnect(false);
       // toast.error("Wrong Newtwork please connect to test net")
     } else {
-      setconnect(true)
+      setconnect(true);
     }
-  }
+  };
 
   useEffect(() => {
-    getValue()
+    getValue();
     setInterval(() => {
-      connectdata()
+      connectdata();
     }, 1000);
-
-  }, [])
-  
-
-
+  }, []);
 
   return (
     <>
       <div className="main_div">
-      <div className="connected_div">
-
-{
-  connect ? <> <img src={connected} alt="" width="25%" /> </> : <><img src={notcoonect} alt="" width="25%" /></>
-}
-</div>
+        <div className="connected_div">
+          {connect ? (
+            <>
+              {" "}
+              <img src={connected} alt="" width="25%" />{" "}
+            </>
+          ) : (
+            <>
+              <img src={notcoonect} alt="" width="25%" />
+            </>
+          )}
+        </div>
         <div className="container kig">
           <div className=" d-flex responsive">
             <div className="row  justify-content-center">
@@ -174,27 +178,41 @@ function Landing() {
                   <img src={logo} className="img-fluid w-50" alt="" />
                 </div>
                 <div className="heding">
-                  <h5 className="text-white">GENESIS KING CROWN</h5>
+                  <h5 className="text-white">{name}</h5>
                   <p>{ValueBNB} BNB</p>
                 </div>
 
                 <div className="light">
-                  <img src={coin}  width="100%" alt="" />
+                  <img src={coin} width="100%" alt="" />
                 </div>
                 <div className="blck d-flex justify-content-center">
                   <div className="btn plus" onClick={() => decreaseValue()}>
                     -
                   </div>{" "}
-                  <div className="enput text-center"
-                    value={value} onChange={(e) => setValue(e.target.value)}
-                  >{value}</div>{" "}
+                  <div
+                    className="enput text-center"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                  >
+                    {value}
+                  </div>{" "}
                   <div className="btn plus" onClick={() => increaseValue()}>
                     +
                   </div>{" "}
                 </div>
 
                 <div className="mint" style={{ cursor: "pointer" }}>
-                  <img src={mint} alt="" onClick={()=>Mint_With_BNB()} />
+                  {spinnerload ? (
+                    <img src={mint} alt="" onClick={() => Mint_With_BNB()} />
+                  ) : (
+                    <div class="d-flex mt-3 justify-content-center">
+                      <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* <img src={mint} alt="" onClick={()=>Mint_With_BNB()} /> */}
                 </div>
               </div>
             </div>

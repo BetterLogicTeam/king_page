@@ -361,3 +361,8 @@
     justify-content: end;
     margin-top: -8rem !important;
 }
+
+.spinner-border{
+    color: rgb(210,149,71);
+    font-size: 20px;
+}
